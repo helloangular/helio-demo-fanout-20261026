@@ -1,0 +1,13 @@
+name: demo-probe
+# Helio internal demo (26 Oct 2026): readiness probe for the demo App connection's gate profile. Dispatched once by the
+# builder; it waits at the protected environment demo-probe and is never approved (cancel it at teardown).
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    environment: demo-probe
+    steps:
+      - run: echo "demo readiness probe; never approved"

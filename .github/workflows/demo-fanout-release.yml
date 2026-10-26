@@ -1,0 +1,24 @@
+name: demo-fanout-release
+run-name: ${{ inputs.helio_execution_id || format('Helio demo fan-out release {0}', github.sha) }}
+# Helio internal demo (26 Oct 2026): Environment Catalog caller. Helio starts it for a release; the central template
+# builds, tests and publishes one artifact, then deploys it to the catalog environments Helio approved
+# (qa -> 3 preprod banks in parallel -> smoke -> 2 production banks in parallel -> verify). Nothing is deployed.
+on:
+  workflow_dispatch:
+    inputs:
+      helio_execution_id:
+        type: string
+        required: false
+        default: ''
+      helio_target_environment:
+        type: string
+        required: false
+        default: ''
+permissions:
+  contents: read
+jobs:
+  release:
+    uses: helloangular/helio-client-capacity-20260916/.github/workflows/demo-fanout-deploy.yml@demo-fanout-20261026
+    with:
+      helio_execution_id: ${{ inputs.helio_execution_id || '' }}
+      helio_target_environment: ${{ inputs.helio_target_environment || '' }}
